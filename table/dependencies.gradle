@@ -1,0 +1,26 @@
+project.ext {
+
+    bintrayRepo = 'maven'
+    bintrayName = 'table'
+
+    publishedGroupId = 'com.rayject'
+    libraryName = 'table'
+    artifact = 'table'
+
+    libraryDescription = ''
+
+    siteUrl = 'https://github.com/idleray/TableView'
+    gitUrl = 'https://github.com/idleray/TableView.git'
+
+    libraryVersionCode = 1
+    libraryVersion = '1.0.0'
+
+    developerId = 'idleray'
+    developerName = 'idleray'
+    developerEmail = 'idleray@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+
+}
