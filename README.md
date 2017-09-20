@@ -13,19 +13,19 @@ TableView support many features
 * Support range selection
 * ......
 
-#Screenshot
+## Screenshot
+
 ![screenshot](screenshots/Screenshot.gif)
 
-##Download
+## Download
 
 ```groovy
 dependencies {
   compile 'com.rayject:table:1.0.1'
 }
 ```
-##Usage
 
-##License
+## License
 ```
 Copyright 2013 idleray
 
