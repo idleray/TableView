@@ -38,7 +38,7 @@ public abstract class BaseCellData implements ICellData {
     protected Range mMergedRange;
     protected int mCellStyleId;
     protected CellStyle mCellStyle;
-    protected boolean mIsExcel = false;
+    protected boolean mIsExcel = true;
 
     protected Path mHighlightPath;
     protected Paint mHighlightPaint;

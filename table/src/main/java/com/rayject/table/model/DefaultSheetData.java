@@ -131,6 +131,8 @@ public class DefaultSheetData extends BaseSheetData{
     public void setCellData(ICellData cell, int rowIndex, int colIndex) {
         long cellPos = getCellPosition(rowIndex, colIndex);
         cells.put(cellPos, cell);
+        Range range = checkCellMerged(rowIndex, colIndex);
+        cell.setMergedRange(range);
     }
 
     @Override
@@ -162,14 +164,42 @@ public class DefaultSheetData extends BaseSheetData{
         return mergedRanges.size();
     }
 
-    public void addMergedRange(Range range) {
+    public boolean addMergedRange(Range range) {
         if(range != null) {
+            if(isCrossFreezed(range)) {
+                return false;
+            }
             mergedRanges.add(range);
+            ICellData cell = getCellData(range.getTop(), range.getLeft());
+            if(cell != null) {
+                cell.setMergedRange(range);
+            }
         }
+
+        return true;
+    }
+
+    private boolean isCrossFreezed(Range range) {
+        if(isFreeze()) {
+            int rowCount = getFreezedRowCount();
+            if(range.getTop() < rowCount && range.getBottom() >= rowCount) {
+                return true;
+            }
+            int colCount = getFreezedColCount();
+            if(range.getLeft() < colCount && range.getRight() >= rowCount) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void removeMergedRangeAt(int index) {
-        mergedRanges.remove(index);
+        Range range = mergedRanges.remove(index);
+        ICellData cell = getCellData(range.getTop(), range.getLeft());
+        if(cell != null) {
+            cell.setMergedRange(null);
+        }
     }
 
     @Override
@@ -255,5 +285,15 @@ public class DefaultSheetData extends BaseSheetData{
 
     private long getCellPosition(int rowIndex, int colIndex) {
         return ((long)rowIndex << 32) + colIndex;
+    }
+
+    private Range checkCellMerged(int rowIndex, int colIndex) {
+        for(Range r : mergedRanges) {
+            if( r.getTop() == rowIndex &&
+                    r.getLeft() == colIndex) {
+                return r;
+            }
+        }
+        return null;
     }
 }

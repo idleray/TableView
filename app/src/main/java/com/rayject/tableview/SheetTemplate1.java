@@ -7,8 +7,12 @@ import android.widget.Toast;
 
 import com.rayject.table.model.DefaultCellData;
 import com.rayject.table.model.DefaultSheetData;
+import com.rayject.table.model.ICellData;
 import com.rayject.table.model.ISheetData;
+import com.rayject.table.model.Range;
 import com.rayject.table.model.RichText;
+import com.rayject.table.model.TextRun;
+import com.rayject.table.model.action.Action;
 import com.rayject.table.model.object.CellObject;
 import com.rayject.table.model.object.DrawableObject;
 import com.rayject.table.model.style.CellStyle;
@@ -45,25 +49,39 @@ public class SheetTemplate1 {
             for(int j = 0; j < colCount; j++) {
                 DefaultCellData cell = new DefaultCellData(sheet);
                 RichText richText = new RichText();
-                if(i == 0) {
-//                    if(j == 0) {
-//                        Drawable d = getResources().getDrawable(R.drawable.unread);
-//                        DrawableObject bo = new DrawableObject(cell, d);
-//                        bo.setOnClickListener(new CellObject.OnClickListener() {
-//                            @Override
-//                            public boolean onClick(CellObject cellObject) {
-//                                Toast.makeText(context, "click DrawableObject", Toast.LENGTH_SHORT).show();
-//                                return true;
-//                            }
-//                        });
+                if(i == 2) {
+                    String text = "cell-" + i + "-" + j;
+                    if(j == 0) {
+                        Drawable d = context.getResources().getDrawable(R.drawable.vip_star);
+                        DrawableObject bo = new DrawableObject(cell, d);
+                        bo.setOnClickListener(new CellObject.OnClickListener() {
+                            @Override
+                            public boolean onClick(CellObject cellObject) {
+                                Toast.makeText(context, "click DrawableObject", Toast.LENGTH_SHORT).show();
+                                return true;
+                            }
+                        });
 //                        bo.setAlignment(TableConst.ALIGNMENT_CENTER);
-//                        bo.setAlignment(TableConst.ALIGNMENT_RIGHT);
-//                        bo.setvAlignment(TableConst.VERTICAL_ALIGNMENT_CENTRE);
+                        bo.setAlignment(TableConst.ALIGNMENT_RIGHT);
+                        bo.setvAlignment(TableConst.VERTICAL_ALIGNMENT_CENTRE);
 //                        bo.setvAlignment(TableConst.VERTICAL_ALIGNMENT_BOTTOM);
-//                        cell.addObject(bo);
-//                    }
+                        cell.addObject(bo);
+
+                        TextRun tr = new TextRun();
+                        tr.setStartPos(0);
+                        tr.setLength("cell".length());
+                        tr.setBackgrundColor(0xffff0000);
+                        tr.setAction(new Action() {
+                            @Override
+                            public boolean onAction(ICellData cell) {
+                                Toast.makeText(context, "click on text", Toast.LENGTH_SHORT).show();
+                                return true;
+                            }
+                        });
+                        richText.addRun(tr);
+                    }
                     cell.setStyleIndex(frStyleIndex);
-                    richText.setText("cell-" + i + "-" + j);
+                    richText.setText(text);
                 } else {
                     if(i % 2 == 0) {
                         cell.setStyleIndex(oddRowStyleIndex);
@@ -75,6 +93,13 @@ public class SheetTemplate1 {
             }
         }
 
+        addMergeRange(sheet);
+
         return sheet;
+    }
+
+    private static void addMergeRange(DefaultSheetData sheet) {
+        Range range = new Range(0, 2, 1, 3);
+        sheet.addMergedRange(range);
     }
 }

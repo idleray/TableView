@@ -34,6 +34,12 @@ public interface ISheetData {
 
     Range inMergedRange(int rowIndex, int colIndex, boolean includeFirstCell);
 
+    int getMergedRangeCount();
+
+    boolean addMergedRange(Range range);
+
+    void removeMergedRangeAt(int index);
+
     boolean isBlankCell(int rowIndex, int colIndex);
 
     int getLastRow();

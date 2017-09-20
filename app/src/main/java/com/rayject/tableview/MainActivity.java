@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         configure.setShowHeaders(true);
         configure.setEnableResizeRow(true);
         configure.setEnableResizeColumn(true);
+        configure.setEnableSelection(true);
         mTableView.setConfigure(configure);
     }
 

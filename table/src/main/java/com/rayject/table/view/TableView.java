@@ -1513,7 +1513,7 @@ public class TableView extends View
 
             //Get the y position of the layout in cell
             CellStyle style = cellData.getCellStyle();
-            int cellHeight = getCellHeight(rowId, colId, false);
+            int cellHeight = getCellHeight(rowId, colId, true);
             int vAlignment = (style == null ? TableConst.VERTICAL_ALIGNMENT_CENTRE : style.getVerticalAlignment());
             switch (vAlignment) {
                 case TableConst.VERTICAL_ALIGNMENT_TOP:
@@ -1531,7 +1531,7 @@ public class TableView extends View
             }
 
             //Get the x position of the layout in cell
-            int cellWidth = getCellWidth(rowId, colId, false);
+            int cellWidth = getCellWidth(rowId, colId, true);
             Layout.Alignment align = layout.getAlignment();
             if (align == Layout.Alignment.ALIGN_NORMAL) {
 
@@ -1552,7 +1552,9 @@ public class TableView extends View
             }
 
             int yInLayout = yInCell - y;
-            int xInLayout = xInCell - x;
+            //Horizontal aligment was handled by Layout.Alignment
+//            int xInLayout = xInCell - x;
+            int xInLayout = xInCell;
             int line = layout.getLineForVertical(yInLayout);
             int off = layout.getOffsetForHorizontal(line, xInLayout);
             ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
@@ -1569,8 +1571,8 @@ public class TableView extends View
         if(cell == null) {
             return false;
         }
-        int colWidth = mSheetData.getColumnWidth(colId);
-        int rowHeight = mSheetData.getRowHeight(rowId);
+        int cellWidth = getCellWidth(rowId, colId, true);
+        int cellHeight = getCellHeight(rowId, colId, true);
         int xInCell = (int) event.getX() - getColumnPositionX(colId);
         int yInCell = (int) event.getY() - getRowPositionY(rowId);
 
@@ -1578,7 +1580,7 @@ public class TableView extends View
         for(int i = count - 1; i >= 0; i--) {
             CellObject dObject = cell.getObject(i);
 
-            Point point = CellObject.getPositionInRect(dObject, colWidth, rowHeight);
+            Point point = CellObject.getPositionInRect(dObject, cellWidth, cellHeight);
             int left = point.x;
             int top = point.y;
 
@@ -2490,7 +2492,11 @@ public class TableView extends View
             }
         }
 
-        return mCacheRowHeights[rowIndex];
+        int rowHeight = 0;
+        if(!mSheetData.isRowHidden(rowIndex)) {
+            rowHeight = mCacheRowHeights[rowIndex];
+        }
+        return rowHeight;
     }
 
     public int getColumnWidth(int colIndex) {
@@ -2501,7 +2507,12 @@ public class TableView extends View
                 mCacheColumnWidths[j] = Math.round(mUnitsConverter.getZoomedValue(mSheetData.getColumnWidth(j)));
             }
         }
-        return mCacheColumnWidths[colIndex];
+
+        int colWidth = 0;
+        if(!mSheetData.isColumnHidden(colIndex)) {
+            colWidth = mCacheColumnWidths[colIndex];
+        }
+        return colWidth;
     }
 
     private int getTableHeight() {
