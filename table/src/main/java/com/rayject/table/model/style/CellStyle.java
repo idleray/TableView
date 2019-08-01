@@ -6,7 +6,7 @@ public class CellStyle {
     private int bgColor;
     private int mVAlignment = TableConst.VERTICAL_ALIGNMENT_TOP;
     private int mAlignment = TableConst.ALIGNMENT_GENERAL;
-    private int mIdention = 0;
+    private int mIndention = 0;
     private boolean isAutoWrap = true;
     private int fontIndex;
 
@@ -123,7 +123,7 @@ public class CellStyle {
         if(bgColor == cellStyle.bgColor
                 && mVAlignment == cellStyle.mVAlignment
                 && mAlignment == cellStyle.mAlignment
-                && mIdention == cellStyle.mIdention
+                && mIndention == cellStyle.mIndention
                 && isAutoWrap == cellStyle.isAutoWrap
                 && fontIndex == cellStyle.fontIndex
                 && Objects.equals(borderLines, cellStyle.borderLines)
@@ -138,7 +138,7 @@ public class CellStyle {
         CellStyle clone = new CellStyle();
         clone.bgColor = this.bgColor;
         clone.mVAlignment = this.mVAlignment;
-        clone.mIdention = mIdention;
+        clone.mIndention = mIndention;
         clone.isAutoWrap = isAutoWrap;
         clone.fontIndex = fontIndex;
 
@@ -171,11 +171,11 @@ public class CellStyle {
     }
 
     public int getIndention() {
-        return mIdention;
+        return mIndention;
     }
 
     public void setIndention(int indention) {
-        mIdention = indention;
+        mIndention = indention;
     }
 
     public boolean isAutoWrap() {

@@ -7,7 +7,7 @@ public class TextRun implements ITextRun{
     private int index;
     private int length;
     private int fontIndex = -1;
-    private int backgrundColor;
+    private int backgroundColor;
     private Action action;
 
     @Override
@@ -27,7 +27,7 @@ public class TextRun implements ITextRun{
 
     @Override
     public int getBackgroundColor() {
-        return backgrundColor;
+        return backgroundColor;
     }
 
     public void setStartPos(int pos) {
@@ -42,8 +42,8 @@ public class TextRun implements ITextRun{
         this.fontIndex = fontIndex;
     }
 
-    public void setBackgrundColor(int color) {
-        backgrundColor = color;
+    public void setBackgroundColor(int color) {
+        backgroundColor = color;
     }
 
     @Override

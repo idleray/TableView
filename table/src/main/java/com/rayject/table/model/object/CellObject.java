@@ -12,7 +12,7 @@ import com.rayject.table.util.DrawableStateWrapper;
 public abstract class CellObject {
     private ICellData cell;
     private int alignment;
-    private int vAlignment;
+    private int verticalAlignment;
     private int leftPadding, topPadding, rightPadding, BottomPadding;
     private Drawable background;
     private boolean selected;
@@ -43,12 +43,12 @@ public abstract class CellObject {
         this.alignment = alignment;
     }
 
-    public int getvAlignment() {
-        return vAlignment;
+    public int getVerticalAlignment() {
+        return verticalAlignment;
     }
 
-    public void setvAlignment(int vAlignment) {
-        this.vAlignment = vAlignment;
+    public void setVerticalAlignment(int verticalAlignment) {
+        this.verticalAlignment = verticalAlignment;
     }
 
     public int getLeftPadding() {
@@ -168,7 +168,7 @@ public abstract class CellObject {
                 break;
         }
 
-        int vAlignment = dObject.getvAlignment();
+        int vAlignment = dObject.getVerticalAlignment();
         int top = dObject.getTopPadding();
         switch (vAlignment) {
             case TableConst.VERTICAL_ALIGNMENT_CENTRE:

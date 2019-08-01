@@ -18,7 +18,6 @@ import com.rayject.table.model.object.DrawableObject;
 import com.rayject.table.model.style.CellStyle;
 import com.rayject.table.model.style.Font;
 import com.rayject.table.model.style.TableConst;
-import com.rayject.table.util.ConstVar;
 
 public class SheetTemplate1 {
 
@@ -63,14 +62,14 @@ public class SheetTemplate1 {
                         });
 //                        bo.setAlignment(TableConst.ALIGNMENT_CENTER);
                         bo.setAlignment(TableConst.ALIGNMENT_RIGHT);
-                        bo.setvAlignment(TableConst.VERTICAL_ALIGNMENT_CENTRE);
-//                        bo.setvAlignment(TableConst.VERTICAL_ALIGNMENT_BOTTOM);
+                        bo.setVerticalAlignment(TableConst.VERTICAL_ALIGNMENT_CENTRE);
+//                        bo.setVerticalAlignment(TableConst.VERTICAL_ALIGNMENT_BOTTOM);
                         cell.addObject(bo);
 
                         TextRun tr = new TextRun();
                         tr.setStartPos(0);
                         tr.setLength("cell".length());
-                        tr.setBackgrundColor(0xffff0000);
+                        tr.setBackgroundColor(0xffff0000);
                         tr.setAction(new Action() {
                             @Override
                             public boolean onAction(ICellData cell) {

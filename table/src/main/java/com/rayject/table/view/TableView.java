@@ -2250,6 +2250,7 @@ public class TableView extends View
             mCacheRowHeights[rowIndex] = newHeight;
         }
         mSheetData.setRowHeight(rowIndex, mUnitsConverter.getOriginValue(newHeight));
+        clearCacheTableHeight();
     }
 
     private void modifyColumnWidthBy(int colIndex, int dx) {
@@ -2260,6 +2261,7 @@ public class TableView extends View
         width = mUnitsConverter.getOriginValue(width);
         int w = Math.round(width);
         mSheetData.setColumnWidth(colIndex, w);
+        clearCacheTableWidth();
     }
 
     public void setEnableScroll(boolean canScroll) {
@@ -2664,11 +2666,19 @@ public class TableView extends View
         mCacheColumnWidths = null;
         mFreezePositionX = -1;
         mFreezePositionY = -1;
-        mCacheTableHeight = -1;
-        mCacheTableWidth = -1;
         mLastVisibleRow = -1;
         mLastVisibleCol = -1;
+        clearCacheTableHeight();
+        clearCacheTableWidth();
         invalidate();
+    }
+
+    private void clearCacheTableHeight() {
+        mCacheTableHeight = -1;
+    }
+
+    private void clearCacheTableWidth() {
+        mCacheTableWidth = -1;
     }
 
     public static void savePic(Bitmap b, String strFileName) {

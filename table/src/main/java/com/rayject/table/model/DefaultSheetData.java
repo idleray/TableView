@@ -2,6 +2,9 @@ package com.rayject.table.model;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 
@@ -20,6 +23,7 @@ public class DefaultSheetData extends BaseSheetData{
     private CellStyleManager cellStyleManager;
     private FontManager fontManager;
     private int styleId;
+    private int defaultRowHeight, defaultColWidth;
     private SparseIntArray rowHeights, colWidths;
     private SparseBooleanArray hiddenRows, hiddenColums;
     private int gridLineColor;
@@ -28,6 +32,7 @@ public class DefaultSheetData extends BaseSheetData{
     private int maxRowCount, maxColCount;
 
     public DefaultSheetData(Context context) {
+        this.context = context;
         gridLineColor = Color.GRAY;
         rowHeights = new SparseIntArray();
         colWidths = new SparseIntArray();
@@ -39,15 +44,31 @@ public class DefaultSheetData extends BaseSheetData{
         cellStyleManager = new CellStyleManager();
         fontManager = new FontManager();
 
+        Font font = Font.createDefault(context);
+        int fontId = fontManager.addFont(font);
+
         CellStyle sheetStyle = new CellStyle();
         sheetStyle.setAlignment(TableConst.ALIGNMENT_CENTER);
         sheetStyle.setVerticalAlignment(TableConst.VERTICAL_ALIGNMENT_CENTRE);
-        styleId = cellStyleManager.addCellStyle(sheetStyle);
-
-        Font font = Font.createDefault(context);
-        int fontId = fontManager.addFont(font);
         sheetStyle.setFontIndex(fontId);
+        setSheetStyleIndex(cellStyleManager.addCellStyle(sheetStyle));
 
+        TextPaint paint = new TextPaint();
+        paint.setAntiAlias(true);
+        paint.setSubpixelText(true);
+        paint.setTextSize(font.getFontSize());
+        String text = "0";
+        float[] widths = new float[text.length()];
+        paint.getTextWidths(text, 0, text.length(), widths);
+        defaultColWidth = (int) (widths[0] * 8);
+
+        StaticLayout layout = new StaticLayout(text, paint, defaultColWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        defaultRowHeight = layout.getHeight();
+
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     @Override
@@ -74,8 +95,22 @@ public class DefaultSheetData extends BaseSheetData{
     }
 
     @Override
+    public int getDefaultRowHeight() {
+        return defaultRowHeight;
+    }
+
+    @Override
+    public void setDefaultRowHeight(int defaultRowHeight) {
+        this.defaultRowHeight = defaultRowHeight;
+    }
+
+    @Override
     public int getRowHeight(int rowIndex) {
-        return rowHeights.get(rowIndex);
+        int rowHeight = rowHeights.get(rowIndex);
+        if(rowHeight == 0) {
+            rowHeight = defaultRowHeight;
+        }
+        return rowHeight;
     }
 
     @Override
@@ -84,8 +119,22 @@ public class DefaultSheetData extends BaseSheetData{
     }
 
     @Override
+    public int getDefaultColumnWidth() {
+        return defaultColWidth;
+    }
+
+    @Override
+    public void setDefaultColumnWidth(int columnWidth) {
+        this.defaultColWidth = columnWidth;
+    }
+
+    @Override
     public int getColumnWidth(int colIndex) {
-        return colWidths.get(colIndex);
+        int width = colWidths.get(colIndex);
+        if(width == 0) {
+            width = defaultColWidth;
+        }
+        return width;
     }
 
     @Override

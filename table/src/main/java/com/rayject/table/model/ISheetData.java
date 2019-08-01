@@ -18,9 +18,17 @@ public interface ISheetData {
 
     int getFirstVisibleColumn();
 
+    int getDefaultRowHeight();
+
+    void setDefaultRowHeight(int rowHeight);
+
     int getRowHeight(int rowIndex);
 
     void setRowHeight(int rowIndex, int rowHeight);
+
+    int getDefaultColumnWidth();
+
+    void setDefaultColumnWidth(int columnWidth);
 
     int getColumnWidth(int colIndex);
 

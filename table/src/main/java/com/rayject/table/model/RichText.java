@@ -13,8 +13,8 @@ public class RichText implements IRichText{
         return text;
     }
 
-    public void setText(String textValue) {
-        text = textValue;
+    public void setText(CharSequence textValue) {
+        text = textValue != null ? textValue.toString() : "";
     }
 
 
