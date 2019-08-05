@@ -5,6 +5,8 @@ import android.widget.Toast
 import com.rayject.table.dsl.*
 import com.rayject.table.model.DefaultSheetData
 import com.rayject.table.model.ISheetData
+import com.rayject.table.model.style.BorderLineStyle
+import com.rayject.table.model.style.Font
 import com.rayject.table.model.style.TableConst
 import com.rayject.table.util.ExcelUtils
 
@@ -16,11 +18,33 @@ fun simpleData(context: Context, rowCount: Int, colCount: Int): ISheetData {
         val fi = font {
             color = 0xffff0000.toInt()
         }
+        val f2 = font {
+            typeOffset = Font.SS_SUB
+        }
+        val f3 = font {
+            isUnderLine = true
+            isStrikeLine = true
+        }
 
         val si = cellStyle {
             fontIndex = fi
             alignment = TableConst.ALIGNMENT_CENTER
+            border {
+                type = BorderLineStyle.BORDER_DOT
+                color = 0xffff0000.toInt()
+                width = BorderLineStyle.BORDER_MEDIUMWIDTH
+            }
 
+            // set border separately
+            leftBorder {
+                type = BorderLineStyle.BORDER_DASH
+                color = 0xffff00ff.toInt()
+                width = BorderLineStyle.BORDER_MEDIUMWIDTH
+            }
+        }
+
+        val s2 = cellStyle {
+            fontIndex = f3
         }
 
         cell(0, 0) {
@@ -30,6 +54,7 @@ fun simpleData(context: Context, rowCount: Int, colCount: Int): ISheetData {
         }
 
         cell(0, 1) {
+            styleIndex = s2
             value {
                 text = "00000000"
             }
@@ -39,6 +64,11 @@ fun simpleData(context: Context, rowCount: Int, colCount: Int): ISheetData {
             styleIndex = si
             value {
                 text = "cell-2"
+                textRun {
+                    startPos = 5
+                    length = 1
+                    fontIndex = f2
+                }
             }
         }
     }

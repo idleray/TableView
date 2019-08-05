@@ -50,4 +50,5 @@ public interface ICellData extends ISelection {
     CellObject getObject(int index);
     void setAction(Action action);
     Action getAction();
+    int calcTextHeightByWidth(int width);
 }

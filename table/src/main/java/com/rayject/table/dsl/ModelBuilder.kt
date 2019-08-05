@@ -5,8 +5,10 @@ import android.graphics.drawable.Drawable
 import com.rayject.table.model.*
 import com.rayject.table.model.`object`.CellObject
 import com.rayject.table.model.`object`.DrawableObject
+import com.rayject.table.model.style.BorderLineStyle
 import com.rayject.table.model.style.CellStyle
 import com.rayject.table.model.style.Font
+import com.rayject.table.model.style.TableConst
 
 @DslMarker
 annotation class TableViewMarker
@@ -22,6 +24,37 @@ fun DefaultSheetData.cellStyle(init: CellStyle.() -> Unit): Int {
     val style = CellStyle()
     style.init()
     return cellStyleManager.addCellStyle(style)
+}
+
+fun CellStyle.border(init: BorderLineStyle.() -> Unit) {
+    val bl = BorderLineStyle()
+    bl.init()
+    setBorderLineStyle(bl, TableConst.LEFTBORDERLINE)
+    setBorderLineStyle(bl, TableConst.RIGHTBORDERLINE)
+    setBorderLineStyle(bl, TableConst.TOPBORDERLINE)
+    setBorderLineStyle(bl, TableConst.BOTTOMBORDERLINE)
+}
+
+fun CellStyle.leftBorder(init: BorderLineStyle.() -> Unit) {
+    addBorder(TableConst.LEFTBORDERLINE, init)
+}
+
+fun CellStyle.rightBorder(init: BorderLineStyle.() -> Unit) {
+    addBorder(TableConst.RIGHTBORDERLINE, init)
+}
+
+fun CellStyle.topBorder(init: BorderLineStyle.() -> Unit) {
+    addBorder(TableConst.TOPBORDERLINE, init)
+}
+
+fun CellStyle.bottomBorder(init: BorderLineStyle.() -> Unit) {
+    addBorder(TableConst.BOTTOMBORDERLINE, init)
+}
+
+private fun CellStyle.addBorder(which: Int, init: BorderLineStyle.() -> Unit) {
+    val bl = BorderLineStyle()
+    bl.init()
+    setBorderLineStyle(bl, which)
 }
 
 fun DefaultSheetData.cell(row: Int, column: Int, init: DefaultCellData.() -> Unit) {

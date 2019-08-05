@@ -108,7 +108,18 @@ public class DefaultSheetData extends BaseSheetData{
     public int getRowHeight(int rowIndex) {
         int rowHeight = rowHeights.get(rowIndex);
         if(rowHeight == 0) {
-            rowHeight = defaultRowHeight;
+            int colCount = getMaxColumnCount();
+            int cellHeight = 0;
+            for(int i = 0; i < colCount; i++) {
+                ICellData cell = getCellData(rowIndex, i);
+                if(cell != null) {
+                    cellHeight = cell.calcTextHeightByWidth(getColumnWidth(i));
+                }
+                rowHeight = Math.max(rowHeight, cellHeight);
+            }
+            if(rowHeight == 0) {
+                rowHeight = defaultRowHeight;
+            }
         }
         return rowHeight;
     }

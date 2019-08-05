@@ -519,6 +519,11 @@ public abstract class BaseCellData implements ICellData {
             return "";
         }
         SpannableStringBuilder sb = new SpannableStringBuilder(richText.getText());
+        int length = sb.length();
+        if(length > 0) {
+            Font font = getSheet().getFontManager().getFont(getCellStyle().getFontIndex());
+            SpannableUtils.convertFont(font, 0, length, sb);
+        }
         int count = richText.getRunCount();
         for(int i = 0; i < count; i++) {
             ITextRun run = richText.getRun(i);
