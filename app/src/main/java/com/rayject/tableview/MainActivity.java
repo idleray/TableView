@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 //        ISheetData sheet = SheetTemplate1.get(this, rowCount, colCount);
-//        ISheetData sheet = DslSampleKt.dslData(this, rowCount, colCount);
-        ISheetData sheet = DslSampleKt.simpleData(this, rowCount, colCount);
+        ISheetData sheet = DslSampleKt.dslData(this, rowCount, colCount);
+//        ISheetData sheet = DslSampleKt.simpleData(this, rowCount, colCount);
 
         mTableView.setSheetData(sheet);
         TableViewConfigure configure = new TableViewConfigure();

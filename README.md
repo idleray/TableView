@@ -21,9 +21,14 @@ TableView support many features
 
 ```groovy
 dependencies {
-  compile 'com.rayject:table:1.0.1'
+  compile 'com.rayject:table:1.0.2'
 }
 ```
+
+## Usage
+
+You can read the codes in [sample app](app/src/main/java/com/rayject/tableview/MainActivity.java)
+
 
 ## License
 ```

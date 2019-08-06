@@ -8,6 +8,8 @@ import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Region;
+import android.os.Build;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
@@ -101,6 +103,16 @@ public abstract class BaseCellData implements ICellData {
         if (mCellStyle == null)
             return;
 
+        //Expand clip to draw border
+        Rect clipBounds = canvas.getClipBounds();
+        clipBounds.inset(-10, -10);
+
+        int saveCount = canvas.save();
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            canvas.clipRect(clipBounds, Region.Op.REPLACE);
+        } else {
+            //TODO: Maybe we should expand the parent clip rect
+        }
         //int offsetH = 0;
         //int offsetV = 0;
         int innerOffset = 2;
@@ -108,17 +120,25 @@ public abstract class BaseCellData implements ICellData {
             innerOffset = uc.getZoomedValue(innerOffset);
         }
 
+        Path path = new Path();
         BorderLineStyle borderline = mCellStyle.getBorderLineStyle(TableConst.LEFTBORDERLINE);
         if (borderline != null && borderline.getType() != BorderLineStyle.BORDER_NONE) {
             setBorderlinePaint(borderline, paint, uc);
-            canvas.drawLine(rect.left, rect.top, rect.left, rect.bottom, paint);
+            path.reset();
+            path.moveTo(rect.left, rect.top);
+            path.lineTo(rect.left, rect.bottom);
+            canvas.drawPath(path, paint);
             if (borderline.getType() == BorderLineStyle.BORDER_DOUBLE) {
                 int lineSpace1, lineSpace2;
-                int space = innerOffset;
+                int lineStart = (int) (paint.getStrokeWidth() + innerOffset);
+                int space = lineStart;
                 space -= paint.getStrokeWidth() / 2;
                 lineSpace1 = Math.max(2, space);
                 lineSpace2 = Math.max(1, space);
-                canvas.drawLine(rect.left + innerOffset, rect.top + lineSpace1, rect.left + innerOffset, rect.bottom - lineSpace2, paint);
+                path.reset();
+                path.moveTo(rect.left + lineStart, rect.top + lineSpace1);
+                path.lineTo(rect.left + lineStart, rect.bottom - lineSpace2);
+                canvas.drawPath(path, paint);
             }
 
         }
@@ -126,44 +146,67 @@ public abstract class BaseCellData implements ICellData {
         borderline = mCellStyle.getBorderLineStyle(TableConst.TOPBORDERLINE);
         if (borderline != null && borderline.getType() != BorderLineStyle.BORDER_NONE) {
             setBorderlinePaint(borderline, paint, uc);
-            canvas.drawLine(rect.left, rect.top, rect.right, rect.top, paint);
+            path.reset();
+            path.moveTo(rect.left, rect.top);
+            path.lineTo(rect.right, rect.top);
+            canvas.drawPath(path, paint);
             if (borderline.getType() == BorderLineStyle.BORDER_DOUBLE) {
                 int lineSpace1, lineSpace2;
-                int space = innerOffset;
+                int lineStart = (int) (paint.getStrokeWidth() + innerOffset);
+                int space = lineStart;
                 space -= paint.getStrokeWidth() / 2;
                 lineSpace1 = Math.max(2, space);
                 lineSpace2 = Math.max(1, space);
-                canvas.drawLine(rect.left + lineSpace1, rect.top + innerOffset, rect.right - lineSpace2, rect.top + innerOffset, paint);
+                path.reset();
+                path.moveTo(rect.left + lineSpace1, rect.top + lineStart);
+                path.lineTo(rect.right - lineSpace2, rect.top + lineStart);
+                canvas.drawPath(path, paint);
             }
         }
 
         borderline = mCellStyle.getBorderLineStyle(TableConst.RIGHTBORDERLINE);
         if (borderline != null && borderline.getType() != BorderLineStyle.BORDER_NONE) {
             setBorderlinePaint(borderline, paint, uc);
-            canvas.drawLine(rect.right, rect.top, rect.right, rect.bottom, paint);
+            path.reset();
+            path.moveTo(rect.right, rect.top);
+            path.lineTo(rect.right, rect.bottom);
+            canvas.drawPath(path, paint);
             if (borderline.getType() == BorderLineStyle.BORDER_DOUBLE) {
                 int lineSpace1, lineSpace2;
-                int space = innerOffset;
+                int lineStart = (int) (paint.getStrokeWidth() + innerOffset);
+                int space = lineStart;
                 space -= paint.getStrokeWidth() / 2;
                 lineSpace1 = Math.max(2, space);
                 lineSpace2 = Math.max(1, space);
-                canvas.drawLine(rect.right - innerOffset, rect.top + lineSpace1, rect.right - innerOffset, rect.bottom - lineSpace2, paint);
+                path.reset();
+                path.moveTo(rect.right - lineStart, rect.top + lineSpace1);
+                path.lineTo(rect.right - lineStart, rect.bottom - lineSpace2);
+                canvas.drawPath(path, paint);
             }
         }
 
         borderline = mCellStyle.getBorderLineStyle(TableConst.BOTTOMBORDERLINE);
         if (borderline != null && borderline.getType() != BorderLineStyle.BORDER_NONE) {
             setBorderlinePaint(borderline, paint, uc);
-            canvas.drawLine(rect.left, rect.bottom, rect.right, rect.bottom, paint);
+            path.reset();
+            path.moveTo(rect.left, rect.bottom);
+            path.lineTo(rect.right, rect.bottom);
+            canvas.drawPath(path, paint);
             if (borderline.getType() == BorderLineStyle.BORDER_DOUBLE) {
                 int lineSpace1, lineSpace2;
-                int space = innerOffset;
+                int lineStart = (int) (paint.getStrokeWidth() + innerOffset);
+                int space = lineStart;
                 space -= paint.getStrokeWidth() / 2;
                 lineSpace1 = Math.max(2, space);
                 lineSpace2 = Math.max(1, space);
-                canvas.drawLine(rect.left + lineSpace1, rect.bottom - innerOffset, rect.right - lineSpace2, rect.bottom - innerOffset, paint);
+                path.reset();
+                path.moveTo(rect.left + lineSpace1, rect.bottom - lineStart);
+                path.lineTo(rect.right - lineSpace2, rect.bottom - lineStart);
+                canvas.drawPath(path, paint);
             }
         }
+
+        canvas.restoreToCount(saveCount);
     }
 
     private void setBorderlinePaint(BorderLineStyle borderlineStyle, Paint paint, UnitsConverter uc) {
@@ -205,6 +248,7 @@ public abstract class BaseCellData implements ICellData {
             lineWidth = uc.getZoomedValue(lineWidth);
         }
         paint.reset();
+        paint.setStyle(Style.STROKE);
         paint.setStrokeWidth(lineWidth);
         paint.setColor(color);
         paint.setPathEffect(pe);

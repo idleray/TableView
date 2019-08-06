@@ -12,8 +12,8 @@ project.ext {
     siteUrl = 'https://github.com/idleray/TableView'
     gitUrl = 'https://github.com/idleray/TableView.git'
 
-    libraryVersionCode = 2
-    libraryVersion = '1.0.1'
+    libraryVersionCode = 3
+    libraryVersion = '1.0.2'
 
     developerId = 'idleray'
     developerName = 'idleray'

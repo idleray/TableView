@@ -29,6 +29,7 @@ fun simpleData(context: Context, rowCount: Int, colCount: Int): ISheetData {
         val si = cellStyle {
             fontIndex = fi
             alignment = TableConst.ALIGNMENT_CENTER
+            bgColor = 0xffffff00.toInt()
             border {
                 type = BorderLineStyle.BORDER_DOT
                 color = 0xffff0000.toInt()
